@@ -53,7 +53,22 @@ public class Animal {
    * @throws IntakeException if any argument is {@code null}, or if {@code name} is blank
    */
   public Animal(String name, Species species, AgeMonths age, LocalDate intakeDate) {
-    throw new UnsupportedOperationException("TODO: validate the arguments and assign the fields");
+    if(name == null || name.strip().isEmpty()) {
+      throw new IntakeException("Name must be non-null and non-blank");
+    }
+    if(species == null) {
+      throw new IntakeException("Species must be non-null");
+    }
+    if(age == null) {
+      throw new IntakeException("Age must be non-null");
+    }
+    if(intakeDate == null) {
+      throw new IntakeException("Intake date must be non-null");
+    }
+    this.name  = name.strip();
+    this.species = species;
+    this.age = age;
+    this.intakeDate = intakeDate;
   }
 
   /**
@@ -62,7 +77,7 @@ public class Animal {
    * @return the name, never {@code null} and never blank
    */
   public String name() {
-    throw new UnsupportedOperationException("TODO: implement name()");
+    return this.name;
   }
 
   /**
@@ -71,7 +86,7 @@ public class Animal {
    * @return the species, never {@code null}
    */
   public Species species() {
-    throw new UnsupportedOperationException("TODO: implement species()");
+    return this.species;
   }
 
   /**
@@ -80,7 +95,7 @@ public class Animal {
    * @return the age, never {@code null}
    */
   public AgeMonths age() {
-    throw new UnsupportedOperationException("TODO: implement age()");
+    return this.age;
   }
 
   /**
@@ -93,7 +108,7 @@ public class Animal {
    * @return the intake date, never {@code null}
    */
   public LocalDate intakeDate() {
-    throw new UnsupportedOperationException("TODO: implement intakeDate()");
+    return this.intakeDate;
   }
 
   /**
@@ -113,6 +128,6 @@ public class Animal {
    */
   @Override
   public String toString() {
-    throw new UnsupportedOperationException("TODO: implement toString()");
+    return name() + " (" + species() + ", " + age() + ", intake " + intakeDate() + ")";
   }
 }

@@ -15,35 +15,40 @@ import org.junit.jupiter.api.Test;
  * "correct". They do not, however, exhaust it: your own tests are graded too, and there are cases
  * here that are deliberately left for you to think of.
  */
-@Tag("current")
 class AgeMonthsTest {
 
   @Test
+  @Tag("inherited")
   void ofStoresTheGivenNumberOfMonths() {
     assertEquals(7, AgeMonths.of(7).months());
   }
 
   @Test
+  @Tag("inherited")
   void zeroMonthsIsAllowed() {
     assertEquals(0, AgeMonths.of(0).months());
   }
 
   @Test
+  @Tag("inherited")
   void theMaximumIsAllowed() {
     assertEquals(AgeMonths.MAX_MONTHS, AgeMonths.of(AgeMonths.MAX_MONTHS).months());
   }
 
   @Test
+  @Tag("inherited")
   void negativeMonthsIsRefused() {
     assertThrows(IntakeException.class, () -> AgeMonths.of(-1));
   }
 
   @Test
+  @Tag("inherited")
   void aboveTheMaximumIsRefused() {
     assertThrows(IntakeException.class, () -> AgeMonths.of(AgeMonths.MAX_MONTHS + 1));
   }
 
   @Test
+  @Tag("inherited")
   void yearsDiscardsPartialYears() {
     assertEquals(0, AgeMonths.of(0).years());
     assertEquals(0, AgeMonths.of(11).years());
@@ -53,6 +58,7 @@ class AgeMonthsTest {
   }
 
   @Test
+  @Tag("inherited")
   void remainderMonthsIsWhatIsLeftAfterTheWholeYears() {
     assertEquals(0, AgeMonths.of(0).remainderMonths());
     assertEquals(11, AgeMonths.of(11).remainderMonths());
@@ -62,6 +68,7 @@ class AgeMonthsTest {
   }
 
   @Test
+  @Tag("inherited")
   void isUnderOneYearIsTrueBelowTwelveMonths() {
     assertTrue(AgeMonths.of(0).isUnderOneYear());
     assertTrue(AgeMonths.of(11).isUnderOneYear());
@@ -70,6 +77,7 @@ class AgeMonthsTest {
   }
 
   @Test
+  @Tag("inherited")
   void toStringUsesMonthsAloneUnderOneYear() {
     assertEquals("0 months", AgeMonths.of(0).toString());
     assertEquals("1 month", AgeMonths.of(1).toString());
@@ -77,12 +85,14 @@ class AgeMonthsTest {
   }
 
   @Test
+  @Tag("inherited")
   void toStringOmitsTheMonthsPartForWholeYears() {
     assertEquals("1 year", AgeMonths.of(12).toString());
     assertEquals("2 years", AgeMonths.of(24).toString());
   }
 
   @Test
+  @Tag("inherited")
   void toStringCombinesYearsAndMonths() {
     assertEquals("1 year, 1 month", AgeMonths.of(13).toString());
     assertEquals("1 year, 11 months", AgeMonths.of(23).toString());
@@ -90,11 +100,87 @@ class AgeMonthsTest {
   }
 
   @Test
+  @Tag("inherited")
   void theRefusalNamesTheOffendingValue() {
     IntakeException tooOld =
         assertThrows(IntakeException.class, () -> AgeMonths.of(AgeMonths.MAX_MONTHS + 1));
     assertTrue(
         tooOld.getMessage().contains(String.valueOf(AgeMonths.MAX_MONTHS + 1)),
         "the message should name the value that was rejected");
+  }
+
+  @Test
+  @Tag("current")
+  void theMaximumIsFortyYears() {
+    assertEquals(480, AgeMonths.MAX_MONTHS);
+  }
+
+  @Test
+  @Tag("current")
+  void oneBelowTheMaximumIsAllowed() {
+    assertEquals(AgeMonths.MAX_MONTHS - 1, AgeMonths.of(AgeMonths.MAX_MONTHS - 1).months());
+  }
+
+  @Test
+  @Tag("current")
+  void theExtremesOfIntAreRefused() {
+    assertThrows(IntakeException.class, () -> AgeMonths.of(Integer.MIN_VALUE));
+    assertThrows(IntakeException.class, () -> AgeMonths.of(Integer.MAX_VALUE));
+  }
+
+  @Test
+  @Tag("current")
+  void theNegativeRefusalNamesTheOffendingValue() {
+    IntakeException negative = assertThrows(IntakeException.class, () -> AgeMonths.of(-5));
+    assertTrue(
+        negative.getMessage().contains("-5"),
+        "the message should name the value that was rejected");
+  }
+
+  @Test
+  @Tag("current")
+  void theNegativeRefusalSaysWhatWasWrong() {
+    IntakeException negative = assertThrows(IntakeException.class, () -> AgeMonths.of(-1));
+    assertTrue(
+        negative.getMessage().toLowerCase().contains("negative"),
+        "the message should say the value was negative");
+  }
+
+  @Test
+  @Tag("current")
+  void theTooOldRefusalNamesTheLimit() {
+    IntakeException tooOld =
+        assertThrows(IntakeException.class, () -> AgeMonths.of(AgeMonths.MAX_MONTHS + 1));
+    assertTrue(
+        tooOld.getMessage().contains(String.valueOf(AgeMonths.MAX_MONTHS)),
+        "the message should name the limit that was exceeded");
+  }
+
+  @Test
+  @Tag("current")
+  void yearsAndRemainderAtTheMaximum() {
+    assertEquals(40, AgeMonths.of(AgeMonths.MAX_MONTHS).years());
+    assertEquals(0, AgeMonths.of(AgeMonths.MAX_MONTHS).remainderMonths());
+    assertEquals(39, AgeMonths.of(AgeMonths.MAX_MONTHS - 1).years());
+    assertEquals(11, AgeMonths.of(AgeMonths.MAX_MONTHS - 1).remainderMonths());
+  }
+
+  @Test
+  @Tag("current")
+  void isUnderOneYearIsFalseAtTheMaximum() {
+    assertFalse(AgeMonths.of(AgeMonths.MAX_MONTHS).isUnderOneYear());
+  }
+
+  @Test
+  @Tag("current")
+  void toStringPluralisesBothPartsWhenBothAreMoreThanOne() {
+    assertEquals("2 years, 2 months", AgeMonths.of(26).toString());
+  }
+
+  @Test
+  @Tag("current")
+  void toStringAtTheMaximum() {
+    assertEquals("40 years", AgeMonths.of(AgeMonths.MAX_MONTHS).toString());
+    assertEquals("39 years, 11 months", AgeMonths.of(AgeMonths.MAX_MONTHS - 1).toString());
   }
 }
